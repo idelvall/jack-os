@@ -1,6 +1,8 @@
 # hack-os
 
-This is my last project of the great course http://www.nand2tetris.org: a library-monotasking operative system for the Hack machine written in the Jack language
+**Nand2Tetris** is an online, self-teachable course on Building a Modern Computer from First Principles http://www.nand2tetris.org/.
+
+This is my last project (#12), library-monotasking operative system for the Hack machine written in the Jack language.
 
 ## Support bugs and requests
 https://github.com/idelvall/hack-os/issues
