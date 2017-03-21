@@ -1,4 +1,4 @@
-# hack-os
+# jack-os
 
 **Nand2Tetris** is an online, self-teachable course on Building a Modern Computer from First Principles http://www.nand2tetris.org/.
 
