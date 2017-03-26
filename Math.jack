@@ -1,0 +1,133 @@
+class Math{
+	static Array EYE;
+	
+	function void init(){
+	    var int i;
+		let EYE = Array.new(16);
+		let EYE[0] = 1;
+		let i = 1;
+		while(i < 16){
+		    let EYE[i] = EYE[i-1] +  EYE[i-1];
+			let i = i + 1;
+		}
+		return;		
+	}
+	
+	function int abs(int x){
+		if(x < 0){
+			return -x;
+		} else {
+			return x;
+		}
+	}
+	
+	function int min(int x, int y){
+		if(x > y){
+			return y;
+		} else {
+			return x;
+		}
+	}
+	
+	function int max(int x, int y){
+		if(x < y){
+			return y;
+		} else {
+			return x;
+		}
+	}
+	
+	function int mod(int x, int y){
+		return x - ((x / y) * y);
+	}
+	
+	function int multiply(int x, int y){
+		var int i, ret;
+		let i = 0;
+		let ret = 0;
+		while(i < 16){
+		    if(Math.getBit(y, i) = 1){
+				let ret = ret + x;
+			}
+			let x = x + x;
+			let i = i + 1;
+		}
+		return ret;
+	}
+	
+	function int getTwoRaisedTo(int exp){
+		if(exp > 15){
+			return -1;
+		}
+		return EYE[exp];
+	}
+		
+	function int getBit(int x, int i){
+		return -~((x & EYE[i]) = 0);
+	}
+	
+	function int divide(int x, int y){
+		var int q, sign;
+		let sign = 1;
+
+		if(y = 0){
+			do Sys.error(3);
+		} 
+		if(x = 0){
+			return 0;
+		}
+		if(y < 0){
+			if(x > 0){
+				return -Math.divide(x, -y);
+			} else {
+				return Math.divide(-x, -y);
+			}
+		} else {
+			if(x < 0){
+				return -Math.divide(-x, y);
+			}
+		}
+		if(x < y){
+			return 0;
+		}
+		if((2 * y) < 0){
+			return 0;
+		}
+		let q = Math.divide(x, 2 * y);
+		if((x - (2 * q * y)) < y){
+			return 2 * q;
+		} else {
+			return (2 * q) + 1;
+		}
+	}
+	
+	function int sqrt(int x){
+		var int start, end, mid, value;
+		if(x < 0){
+			do Sys.error(4);
+		}
+		if(x = 0){
+			return 0;
+		}
+		let start = 0;
+		let end = x;
+		while(start < end){
+			if(start = (end - 1)){
+				return start;
+			}
+			let mid = start + ((end - start)/2);
+			let value = mid * mid;
+			
+			if(value = x){
+				return mid;
+			} else {
+				if((value > x) | value < 0){
+					let end = mid;
+				} else {
+					let start = mid;
+				}
+			}
+		}
+		return mid;
+	}
+}

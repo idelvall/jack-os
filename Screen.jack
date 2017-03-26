@@ -1,0 +1,146 @@
+class Screen{
+	static int SCREEN;
+	static boolean _color;
+	
+	function void init(){
+		let SCREEN = 16384;
+		let _color = true;
+		return;
+	}
+	
+	function void setColor(boolean color){
+		let _color = color;
+		return;
+	}
+	
+	function int getScreenAddress(int x, int y){
+		return (32 * y) + (x / 16);
+	}
+	
+	function void drawPixel(int x, int y){
+		var int address, value, mask;
+		
+		if((x < 0) | (y < 0) | (x > 511) | (y > 255)){
+			do Sys.error(7);
+		}
+		
+		let address = Screen.getScreenAddress(x, y);
+		let mask = Math.getTwoRaisedTo(Math.mod(x, 16));
+		let value = Memory.peek(SCREEN + address);
+		if(_color){
+			do Memory.poke(SCREEN + address, value | mask);
+		} else {
+			do Memory.poke(SCREEN + address, value & (~mask));
+		}
+		return;
+	}
+	
+	function void drawLine(int x0, int y0, int xf, int yf){
+		var int a, b, diff, dx, dy, stepA, stepB;
+		
+		if(y0 = yf){
+			if(x0 = xf){
+				do Screen.drawPixel(x0, y0);
+				return;
+			} else {
+				do Screen.drawHorizontalLine(x0, xf, y0);
+				return;
+			}
+		}
+		if(x0 = xf){
+			do Screen.drawVerticalLine(x0, y0, yf);
+			return;
+		}		
+		
+		let dx = xf - x0;
+		let dy = yf - y0;
+		if(dx < 0){
+			let stepA = -1;
+		} else {
+			let stepA = 1;
+		}
+		if(dy < 0){
+			let stepB = -1;
+		} else {
+			let stepB = 1;
+		}
+		while((Math.abs(x0 + a - xf) > 0) | (Math.abs(y0 + b - yf) > 0)){
+			do Screen.drawPixel(x0 + a, y0 + b);
+			if(diff < 0){
+				let a = a + stepA;
+				let diff = diff + Math.abs(dy);
+			} else {
+				let b = b + stepB;
+				let diff = diff - Math.abs(dx);
+			}
+		}
+		return;
+	}
+	
+	function void drawVerticalLine(int x, int y0, int yf){
+		var int y;
+		if(y0 > yf) {
+			do Screen.drawVerticalLine(x, yf, y0);
+			return;
+		}
+		let y = y0;
+		while((~(y > yf))){
+			do Screen.drawPixel(x, y);
+			let y = y + 1;
+		}
+		return;
+	}
+	
+	function void drawHorizontalLine(int x0, int xf, int y){
+		var int x, address;
+		if(x0 > xf) {
+			do Screen.drawHorizontalLine(xf, x0, y);
+			return;
+		}
+		let x = x0;
+		while((~(x > xf))){
+			if(((~(Math.mod(x, 16) = 0))) | ((x + 15) > xf)){
+				do Screen.drawPixel(x, y);
+				let x = x + 1;
+			} else {
+				let address = Screen.getScreenAddress(x, y);
+				if(_color){
+					do Memory.poke(SCREEN + address, -1);
+				} else {
+					do Memory.poke(SCREEN + address, 0);
+				}
+				let x = x + 16;
+			}
+		}
+		return;
+	}
+	
+	function void drawCircle(int x, int y, int r){
+		var int dy, dl;
+		if (r > 181){
+			do Sys.error(13);
+		}
+		let dy = -r;
+		while(~(dy > r)){
+			let dl = Math.sqrt((r * r) - (dy * dy));
+			do Screen.drawLine(x - dl, y + dy, x + dl, y + dy);
+			let dy = dy + 1;
+		}
+		return;
+	}
+	
+	function void drawRectangle(int x1, int y1, int x2, int y2){
+		var int y;
+		if(y1 > y2) {
+			do Screen.drawRectangle(x2, y2, x1, y1);
+			return;
+		}
+		let y = y1;
+		while((~(y > y2))){
+			do Screen.drawHorizontalLine(x1, x2, y);
+			let y = y + 1;
+		}
+		return;
+	}
+
+}
